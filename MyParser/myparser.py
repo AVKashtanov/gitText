@@ -40,7 +40,7 @@ while j < max:
         this_title = str(this_title).replace('?', '')
         if this_title == (''):
             this_title = "Нет названия: Страница " + str(j + 1) + ", отзыв " + str(i)
-        filename = this_title[0:25]
+        filename = this_title[0:25] + ".txt"
         #"Страница " + str(j + 1) + ", отзыв " + str(i) + ".txt"
         path = "../m1"
         filepath = os.path.join(path, filename)
