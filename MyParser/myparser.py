@@ -36,8 +36,8 @@ while j < max:
 
     i = 0
     while i < (review_on_page-1):
-        print(str(array_title[i]).replace('*', ''))
         this_title = str(array_title[i]).replace('*', '')
+        this_title = str(this_title).replace('?', '')
         if this_title == (''):
             this_title = "Нет названия: Страница " + str(j + 1) + ", отзыв " + str(i)
         filename = this_title[0:25]
