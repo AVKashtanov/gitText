@@ -2,16 +2,16 @@
 from bs4 import BeautifulSoup
 import requests
 import re
+import os
 
-max = int(input("Сколько страниц спарсить? "))
+review_on_page = 22
 
-max = max * 5
+max = int(input("Сколько страниц вы хотите спарсить? (по " + str(review_on_page - 1) + " отзыва на страницу) "))
 
 j = 0
 while j < max:
 
-    url = 'https://www.tripadvisor.ru/Hotel_Review-or' + str(
-        j) + '-g187497-d7142609-Reviews-Hotel_The_Serras-Barcelona_Catalonia.html'
+    url = 'https://tophotels.ru/hotel/al4780/reviews?fvote=1&frecommend=1&page=' + str(j + 1)
 
     tonality = "p1"
 
@@ -22,23 +22,23 @@ while j < max:
 
     soup = BeautifulSoup(html.text, "html.parser")
 
-    soup_title = soup.find_all("a", class_='hotels-review-list-parts-ReviewTitle__reviewTitleText--3QrTy')
+    soup_title = soup.find_all("p", class_='bth__cnt bold mb5')
     for x in soup_title:
-        x.find("span")
+        x.find("p")
         title = x.text
         array_title.append(title)
 
-    soup_post = soup.find_all("q", class_='hotels-review-list-parts-ExpandableReview__reviewText--3oMkH')
+    soup_post = soup.find_all("p", class_='bth__cnt mb10')
     for y in soup_post:
-        y.find("span")
+        y.find("p")
         post = y.text
         array_post.append(post)
 
     i = 0
-    while i < 5:
-        filename = str(array_title[i]) + ".txt"
+    while i < (review_on_page-1):
+        filename = str(array_title[i]).replace('*', '').replace('?', '').replace('"', '').replace('/', '').replace('-', ' ').replace('\r', '').replace('\n', '') + ".txt"
         F = open('AVKashtanov.json', 'a', encoding='utf-8')
-        text = '{' + "\n"'"student_name": "Kashtanov Artem",' + "\n"'"student_group": 651,' + "\n"'"student_number": 4,' + "\n"'"date": "' + "none" + '",' + "\n"'"Data source": "' + url + '",' + "\n"'"tonality": "' + tonality + '",' + "\n"'"filename": "p1/' + filename + '"' + "\n"'},' + "\n"
+        text = '{' + "\n"'"student_name": "Kashtanov Artem",' + "\n"'"student_group": 651,' + "\n"'"student_number": 19,' + "\n"'"date": "' + "none" + '",' + "\n"'"Data source": "' + url + '",' + "\n"'"tonality": "' + tonality + '",' + "\n"'"filename": "p1/' + filename + '"' + "\n"'},' + "\n"
         F.write(text)
         F.close()
         F2 = open(filename, 'w', encoding='utf-8')
@@ -46,5 +46,6 @@ while j < max:
         F2.close()
         i = i + 1
 
-    j = j + 5
-    print("Спарсено +1 страница!")
+    j = j + 1
+
+    print("Спарсили " + str(review_on_page - 1) + " отзывов")
